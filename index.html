@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="日札是一本安静的数字日记本，写下今天，收好每一个值得记住的瞬间。">
+  <meta name="theme-color" content="#f4efe5">
+  <title>日札 · 把日子写成书</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script>
+    (function () {
+      try {
+        var saved = JSON.parse(localStorage.getItem('rizha.diary.v1') || 'null');
+        var preference = saved && saved.settings && saved.settings.theme || 'system';
+        var dark = preference === 'dark' || (preference === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (error) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#view">跳到主要内容</a>
+
+  <svg class="svg-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="i-feather" viewBox="0 0 24 24">
+        <path d="M19.9 3.8c-2.5-2-7-.7-9.9 2.2C7.3 8.7 6.5 12 5 15c-.5 1.1-1.2 2.3-1.9 3.2 1.2-.2 2.5-.8 3.7-1.5 3-1.7 6-2.7 8.5-5.2 2.5-2.6 3.9-6.3 2.5-8.2Z"/>
+        <path d="M5.4 16.2c2.5-2.8 5.5-5.4 8.6-7.3M8.7 12.7c1.4.5 2.9.3 4.4-.3"/>
+      </symbol>
+      <symbol id="i-book" viewBox="0 0 24 24">
+        <path d="M4 5.8c0-1 .8-1.8 1.8-1.8h5.1C12 4 13 4.7 13 5.9v13.4c0-1-1-1.8-2.1-1.8H5.8c-1 0-1.8-.8-1.8-1.8V5.8Z"/>
+        <path d="M20 5.8c0-1-.8-1.8-1.8-1.8h-4.1C13 4 12 4.7 12 5.9v13.4c0-1 1-1.8 2.1-1.8h5.1c1 0 1.8-.8 1.8-1.8V5.8Z"/>
+      </symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24">
+        <rect x="3.5" y="5" width="17" height="15.5" rx="2"/>
+        <path d="M7.5 3v4M16.5 3v4M3.5 9.5h17"/>
+        <path d="M8 13h2M14 13h2M8 17h2M14 17h2"/>
+      </symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24">
+        <path d="M4 20V4M4 20h16"/>
+        <path d="M8 16v-4M12 16V7M16 16v-6M20 16v-2"/>
+      </symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24">
+        <path d="M20.2 5.8a5.2 5.2 0 0 0-7.4 0L12 6.6l-.8-.8a5.2 5.2 0 1 0-7.4 7.4l8.2 8.2 8.2-8.2a5.2 5.2 0 0 0 0-7.4Z"/>
+      </symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24">
+        <path d="M3.8 11.5V5.2c0-.8.6-1.4 1.4-1.4h6.3c.4 0 .8.2 1.1.4l7.6 7.6c.6.6.6 1.5 0 2.1l-6.2 6.2c-.6.6-1.5.6-2.1 0l-7.6-7.6c-.3-.3-.5-.6-.5-1Z"/>
+        <circle cx="8.2" cy="8.2" r="1.4"/>
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="10.7" cy="10.7" r="6.4"/>
+        <path d="m15.5 15.5 4.4 4.4"/>
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24">
+        <path d="M12 4.5v15M4.5 12h15"/>
+      </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24">
+        <path d="m6 6 12 12M18 6 6 18"/>
+      </symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24">
+        <path d="M4 7h16M4 12h16M4 17h9"/>
+      </symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24">
+        <path d="M19.5 12h-15M10.5 6l-6 6 6 6"/>
+      </symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24">
+        <path d="M4.5 12h15M13.5 6l6 6-6 6"/>
+      </symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24">
+        <path d="m14.5 6-6 6 6 6"/>
+      </symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24">
+        <path d="m9.5 6 6 6-6 6"/>
+      </symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24">
+        <path d="m6 9.5 6 6 6-6"/>
+      </symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"/>
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24">
+        <path d="M20.2 15.3A8.6 8.6 0 0 1 8.7 3.8a8.6 8.6 0 1 0 11.5 11.5Z"/>
+      </symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24">
+        <path d="M7.2 18.5h10a4 4 0 0 0 .4-8 6 6 0 0 0-11.5 1.4 3.3 3.3 0 0 0 1.1 6.6Z"/>
+      </symbol>
+      <symbol id="i-rain" viewBox="0 0 24 24">
+        <path d="M7.2 15.5h10a3.9 3.9 0 0 0 .4-7.8A5.9 5.9 0 0 0 6.3 9a3.3 3.3 0 0 0 .9 6.5Z"/>
+        <path d="m8.5 18.2-.7 1.5M12.4 18.2l-.7 1.5M16.3 18.2l-.7 1.5"/>
+      </symbol>
+      <symbol id="i-wind" viewBox="0 0 24 24">
+        <path d="M3.5 8.5h10.8c1.7 0 2.6-1 2.6-2.3 0-1.2-.9-2.2-2.2-2.2-1 0-1.8.6-2.1 1.4M3.5 12.5h15.1c1.1 0 1.9.9 1.9 2s-.8 2-2 2c-1 0-1.8-.6-2.1-1.5M3.5 16.5h7.2"/>
+      </symbol>
+      <symbol id="i-snow" viewBox="0 0 24 24">
+        <path d="M12 2.8v18.4M4 7.4l16 9.2M20 7.4l-16 9.2M9 4.5l3 2.2 3-2.2M9 19.5l3-2.2 3 2.2"/>
+      </symbol>
+      <symbol id="i-star" viewBox="0 0 24 24">
+        <path d="m12 3.2 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3.2Z"/>
+      </symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24">
+        <path d="M12 3c.5 4.7 1.8 6 6.5 6.5-4.7.5-6 1.8-6.5 6.5-.5-4.7-1.8-6-6.5-6.5C10.2 9 11.5 7.7 12 3ZM19 15c.2 2.1.9 2.8 3 3-2.1.2-2.8.9-3 3-.2-2.1-.9-2.8-3-3 2.1-.2 2.8-.9 3-3Z"/>
+      </symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24">
+        <path d="m14.7 4.6 4.7 4.7M4 20l1-4.3L16.3 4.4a1.9 1.9 0 0 1 2.7 0l.6.6a1.9 1.9 0 0 1 0 2.7L8.3 19 4 20Z"/>
+      </symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24">
+        <path d="M4.5 7h15M9.5 3.5h5M6.5 7l.8 13h9.4l.8-13M10 11v5M14 11v5"/>
+      </symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3.2"/>
+        <path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1-2.9 2.9-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2h-4v-.2a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1-2.9-2.9.1-.1A1.6 1.6 0 0 0 4.6 15a1.6 1.6 0 0 0-1.5-1H3v-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1 2.9-2.9.1.1a1.6 1.6 0 0 0 1.8.3 1.6 1.6 0 0 0 1-1.5v-.2h4v.2a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1 2.9 2.9-.1.1a1.6 1.6 0 0 0-.3 1.8 1.6 1.6 0 0 0 1.5 1h.2v4h-.2a1.6 1.6 0 0 0-1.5 1Z"/>
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24">
+        <path d="M12 3.5v12M7 10.5l5 5 5-5M4 20.5h16"/>
+      </symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24">
+        <path d="M12 20.5v-12M7 13.5l5-5 5 5M4 3.5h16"/>
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="m4.5 12.5 5 5 10-11"/>
+      </symbol>
+      <symbol id="i-quote" viewBox="0 0 24 24">
+        <path d="M9.5 5.5C6.4 7 4.5 9.8 4.5 13v5.5h6V12h-4c.2-2 1.2-3.4 3.4-4.4l-.4-2.1ZM19.5 5.5C16.4 7 14.5 9.8 14.5 13v5.5h6V12h-4c.2-2 1.2-3.4 3.4-4.4l-.4-2.1Z"/>
+      </symbol>
+      <symbol id="i-leaf" viewBox="0 0 24 24">
+        <path d="M20 4.5C12 4 5.5 7.8 5.5 14c0 3 2.4 5.5 5.4 5.5 6.3 0 9.1-7.7 9.1-15Z"/>
+        <path d="M4.5 20c2.7-5 6.3-8.5 11.5-11"/>
+      </symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24">
+        <rect x="4.5" y="10" width="15" height="10.5" rx="2.2"/>
+        <path d="M8 10V7.5a4 4 0 0 1 8 0V10M12 14v3"/>
+      </symbol>
+      <symbol id="i-more" viewBox="0 0 24 24">
+        <circle cx="5" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+        <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+        <circle cx="19" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+      </symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8.8"/>
+        <path d="M12 7v5.3l3.3 2"/>
+      </symbol>
+      <symbol id="i-home" viewBox="0 0 24 24">
+        <path d="m3.5 10.8 8.5-7 8.5 7V20a1 1 0 0 1-1 1h-5v-6h-5v6h-5a1 1 0 0 1-1-1v-9.2Z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="app">
+    <div class="scrim" id="scrim" data-action="close-sidebar" aria-hidden="true"></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="日记本导航">
+      <div class="sidebar-head">
+        <a class="brand" href="#/home" aria-label="日札日记本首页">
+          <span class="brand-seal" aria-hidden="true">札</span>
+          <span class="brand-type">
+            <strong>日札</strong>
+            <small>把日子，写成书</small>
+          </span>
+        </a>
+        <button class="icon-btn sidebar-close" type="button" data-action="close-sidebar" aria-label="关闭菜单">
+          <svg class="icon"><use href="#i-close"></use></svg>
+        </button>
+      </div>
+
+      <div class="today-card" aria-label="今天的日期">
+        <span class="today-eyebrow">今天 · TODAY</span>
+        <div class="today-main">
+          <strong id="sideDay">26</strong>
+          <span class="today-caption"><span id="sideMonth">十月</span><br><span id="sideWeek">星期日</span></span>
+        </div>
+        <span class="today-year" id="sideYear">2026</span>
+        <span class="today-orbit" aria-hidden="true"></span>
+      </div>
+
+      <button class="write-btn" type="button" data-action="new-entry">
+        <span class="write-btn-icon"><svg class="icon"><use href="#i-feather"></use></svg></span>
+        <span>写下此刻</span>
+        <kbd>N</kbd>
+      </button>
+
+      <nav class="sidebar-nav" aria-label="主要导航">
+        <p class="nav-label">日记本</p>
+        <a class="nav-item" href="#/home" data-nav="home">
+          <svg class="icon"><use href="#i-home"></use></svg>
+          <span>书桌</span>
+        </a>
+        <a class="nav-item" href="#/entries" data-nav="entries">
+          <svg class="icon"><use href="#i-book"></use></svg>
+          <span>全部日记</span>
+          <span class="nav-count" id="navCount">0</span>
+        </a>
+        <a class="nav-item" href="#/calendar" data-nav="calendar">
+          <svg class="icon"><use href="#i-calendar"></use></svg>
+          <span>日历</span>
+        </a>
+        <a class="nav-item" href="#/insights" data-nav="insights">
+          <svg class="icon"><use href="#i-chart"></use></svg>
+          <span>心情手记</span>
+        </a>
+        <a class="nav-item" href="#/favorites" data-nav="favorites">
+          <svg class="icon"><use href="#i-heart"></use></svg>
+          <span>收藏</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-tags">
+        <div class="nav-label-row">
+          <p class="nav-label">标签</p>
+          <span class="label-line" aria-hidden="true"></span>
+        </div>
+        <div class="tag-nav" id="tagNav"></div>
+      </div>
+
+      <div class="sidebar-foot">
+        <div class="local-note">
+          <span class="local-dot" aria-hidden="true"></span>
+          <span>只保存在这台设备</span>
+          <svg class="icon"><use href="#i-lock"></use></svg>
+        </div>
+        <button class="settings-link" type="button" data-action="open-settings">
+          <span>偏好与备份</span>
+          <svg class="icon"><use href="#i-settings"></use></svg>
+        </button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn menu-btn" type="button" data-action="open-sidebar" aria-label="打开菜单">
+            <svg class="icon"><use href="#i-menu"></use></svg>
+          </button>
+          <div class="crumb" aria-label="当前位置">
+            <span class="crumb-root">日札</span>
+            <svg class="icon crumb-sep"><use href="#i-chevron-right"></use></svg>
+            <span class="crumb-current" id="crumbCurrent">书桌</span>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button class="search-trigger" type="button" data-action="open-search" aria-label="搜索日记">
+            <svg class="icon"><use href="#i-search"></use></svg>
+            <span>搜索日记</span>
+            <kbd data-shortcut-search>Ctrl K</kbd>
+          </button>
+          <button class="icon-btn theme-btn" type="button" data-action="toggle-theme" aria-label="切换深浅色">
+            <svg class="icon theme-icon-sun"><use href="#i-sun"></use></svg>
+            <svg class="icon theme-icon-moon"><use href="#i-moon"></use></svg>
+          </button>
+          <button class="icon-btn" type="button" data-action="open-settings" aria-label="偏好与备份">
+            <svg class="icon"><use href="#i-settings"></use></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="view" id="view" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div id="editorRoot"></div>
+  <div id="searchRoot"></div>
+  <div id="settingsRoot"></div>
+  <div id="confirmRoot"></div>
+  <div class="toast-host" id="toastHost" aria-live="polite" aria-atomic="false"></div>
+  <div class="sr-only" id="live" aria-live="polite"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
